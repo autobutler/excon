@@ -437,6 +437,17 @@ module Excon
           :scheme     => uri.scheme,
           :user       => uri.user
         }
+      when URI::HTTP
+        unless proxy.userinfo.split(':').size == 2
+          raise Excon::Errors::ProxyParseError, "Proxy is invalid"
+        end
+        {
+          :host     => proxy.host,
+          :password => proxy.userinfo.split(':')[1],
+          :port     => proxy.port,
+          :scheme   => proxy.scheme,
+          :user     => proxy.userinfo.split(':')[0]
+        }
       else
         proxy
       end
